@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-success text-white text-center py-4">
+          <h2 class="mb-0 fw-bold"><i class="fas fa-user-plus me-2"></i>Create Account</h2>
+        </div>
+        <div class="card-body p-4">
+          <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                {{ form.username.label(class_="form-label fw-semibold") }}
+                {{ form.username(class_="form-control form-control-lg", placeholder="Choose a username") }}
+                {% if form.username.errors %}
+                  <div class="text-danger small mt-1">
+                    {% for error in form.username.errors %}{{ error }}{% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+              <div class="col-md-6 mb-3">
+                {{ form.email.label(class_="form-label fw-semibold") }}
+                {{ form.email(class_="form-control form-control-lg", placeholder="Enter your email") }}
+                {% if form.email.errors %}
+                  <div class="text-danger small mt-1">
+                    {% for error in form.email.errors %}{{ error }}{% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="mb-3">
+              {{ form.contact.label(class_="form-label fw-semibold") }}
+              {{ form.contact(class_="form-control form-control-lg", placeholder="Enter your contact number") }}
+              {% if form.contact.errors %}
+                <div class="text-danger small mt-1">
+                  {% for error in form.contact.errors %}{{ error }}{% endfor %}
+                </div>
+              {% endif %}
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                {{ form.password.label(class_="form-label fw-semibold") }}
+                {{ form.password(class_="form-control form-control-lg", placeholder="Create a password") }}
+                {% if form.password.errors %}
+                  <div class="text-danger small mt-1">
+                    {% for error in form.password.errors %}{{ error }}{% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+              <div class="col-md-6 mb-3">
+                {{ form.confirm_password.label(class_="form-label fw-semibold") }}
+                {{ form.confirm_password(class_="form-control form-control-lg", placeholder="Confirm your password") }}
+                {% if form.confirm_password.errors %}
+                  <div class="text-danger small mt-1">
+                    {% for error in form.confirm_password.errors %}{{ error }}{% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="d-grid mt-4">
+              <button class="btn btn-success btn-lg fw-semibold" type="submit">
+                <i class="fas fa-user-plus me-2"></i>{{ form.submit.label.text }}
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer bg-light text-center py-3">
+          <p class="mb-0">Already have an account? <a href="{{ url_for('login') }}" class="text-success fw-semibold">Login here</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+.card {
+  border-radius: 15px;
+}
+.card-header {
+  border-radius: 15px 15px 0 0 !important;
+}
+.btn-lg {
+  border-radius: 50px;
+  font-weight: 500;
+}
+.form-control:focus {
+  border-color: #28a745;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+</style>
+{% endblock %}

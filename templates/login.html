@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white text-center py-4">
+          <h2 class="mb-0 fw-bold"><i class="fas fa-sign-in-alt me-2"></i>Login</h2>
+        </div>
+        <div class="card-body p-4">
+          <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="mb-4">
+              {{ form.username.label(class_="form-label fw-semibold") }}
+              {{ form.username(class_="form-control form-control-lg", placeholder="Enter your username") }}
+              {% if form.username.errors %}
+                <div class="text-danger small mt-1">
+                  {% for error in form.username.errors %}{{ error }}{% endfor %}
+                </div>
+              {% endif %}
+            </div>
+            <div class="mb-4">
+              {{ form.password.label(class_="form-label fw-semibold") }}
+              {{ form.password(class_="form-control form-control-lg", placeholder="Enter your password") }}
+              {% if form.password.errors %}
+                <div class="text-danger small mt-1">
+                  {% for error in form.password.errors %}{{ error }}{% endfor %}
+                </div>
+              {% endif %}
+            </div>
+            <div class="d-grid">
+              <button class="btn btn-primary btn-lg fw-semibold" type="submit">
+                <i class="fas fa-sign-in-alt me-2"></i>{{ form.submit.label.text }}
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer bg-light text-center py-3">
+          <p class="mb-0">Don't have an account? <a href="{{ url_for('register') }}" class="text-primary fw-semibold">Register here</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+.card {
+  border-radius: 15px;
+}
+.card-header {
+  border-radius: 15px 15px 0 0 !important;
+}
+.btn-lg {
+  border-radius: 50px;
+  font-weight: 500;
+}
+.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+</style>
+{% endblock %}

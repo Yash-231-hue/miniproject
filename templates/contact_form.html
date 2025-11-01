@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-info text-white text-center py-4">
+          <h2 class="mb-0 fw-bold"><i class="fas fa-envelope me-2"></i>Contact Doctor</h2>
+        </div>
+        <div class="card-body p-4">
+          <div class="text-center mb-4">
+            <h5>Contacting: {{ doctor.name }}</h5>
+            <p class="text-muted">{{ doctor.specialization }} - {{ doctor.location }}</p>
+          </div>
+          <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+              {{ form.message.label(class_="form-label") }}
+              {{ form.message(class_="form-control", rows=5, placeholder="Describe your inquiry or health question...") }}
+              {% if form.message.errors %}
+                <div class="text-danger small">
+                  {% for error in form.message.errors %}{{ error }}{% endfor %}
+                </div>
+              {% endif %}
+            </div>
+            <div class="d-grid">
+              {{ form.submit(class_="btn btn-info btn-lg") }}
+            </div>
+          </form>
+          <div class="text-center mt-3">
+            <p class="mb-0">Alternative contact methods:</p>
+            <small class="text-muted">{{ doctor.contact_info }}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+.card {
+  border-radius: 15px;
+}
+.card-header {
+  border-radius: 15px 15px 0 0 !important;
+}
+.btn-lg {
+  border-radius: 50px;
+  font-weight: 500;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-success text-white text-center py-4">
+          <h2 class="mb-0 fw-bold"><i class="fas fa-calendar-plus me-2"></i>Book Appointment</h2>
+        </div>
+        <div class="card-body p-4">
+          <div class="text-center mb-4">
+            <h5>Booking with: {{ doctor.name }}</h5>
+            <p class="text-muted">{{ doctor.specialization }} - {{ doctor.location }}</p>
+            <p class="text-success fw-bold">Consultation Fee: ₹{{ doctor.fees }}</p>
+          </div>
+          <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                {{ form.date.label(class_="form-label") }}
+                {{ form.date(class_="form-control", type="date") }}
+                {% if form.date.errors %}
+                  <div class="text-danger small">
+                    {% for error in form.date.errors %}{{ error }}{% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+              <div class="col-md-6 mb-3">
+                {{ form.time.label(class_="form-label") }}
+                {{ form.time(class_="form-control", type="time") }}
+                {% if form.time.errors %}
+                  <div class="text-danger small">
+                    {% for error in form.time.errors %}{{ error }}{% endfor %}
+                </div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="mb-3">
+              {{ form.visit_type.label(class_="form-label") }}
+              <div class="row">
+                {% for visit_type in doctor.visit_types %}
+                  <div class="col-md-6">
+                    <div class="form-check">
+                      {% if visit_type == 'clinic' %}
+                        {{ form.visit_type(class_="form-check-input", value="clinic") }}
+                        <label class="form-check-label">Clinic Visit</label>
+                      {% elif visit_type == 'online' %}
+                        {{ form.visit_type(class_="form-check-input", value="online") }}
+                        <label class="form-check-label">Online Consultation</label>
+                      {% endif %}
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+              {% if form.visit_type.errors %}
+                <div class="text-danger small">
+                  {% for error in form.visit_type.errors %}{{ error }}{% endfor %}
+                </div>
+              {% endif %}
+            </div>
+            <div class="mb-3">
+              {{ form.notes.label(class_="form-label") }}
+              {{ form.notes(class_="form-control", rows=3, placeholder="Any specific symptoms or concerns...") }}
+              {% if form.notes.errors %}
+                <div class="text-danger small">
+                  {% for error in form.notes.errors %}{{ error }}{% endfor %}
+                </div>
+              {% endif %}
+            </div>
+            <div class="d-grid">
+              {{ form.submit(class_="btn btn-success btn-lg") }}
+            </div>
+          </form>
+          <div class="text-center mt-3">
+            <p class="mb-0">Need to contact the doctor first? <a href="{{ url_for('contact', doc_id=doctor.id) }}">Send a message</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+.card {
+  border-radius: 15px;
+}
+.card-header {
+  border-radius: 15px 15px 0 0 !important;
+}
+.btn-lg {
+  border-radius: 50px;
+  font-weight: 500;
+}
+</style>
+{% endblock %}

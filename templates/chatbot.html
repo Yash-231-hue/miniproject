@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white text-center py-4">
+          <h2 class="mb-0 fw-bold"><i class="fas fa-robot me-2"></i>Clinic Assistant Chatbot</h2>
+        </div>
+        <div class="card-body p-0">
+          <div id="chat-container" class="p-4" style="height: 400px; overflow-y: auto; background-color: #f8f9fa;">
+            <div class="message bot-message mb-3">
+              <div class="d-flex align-items-start">
+                <div class="avatar bg-primary text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                  <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content bg-white p-3 rounded shadow-sm">
+                  <p class="mb-0">Hello! I'm your Clinic Assistant. I can help you with:</p>
+                  <ul class="mb-0 mt-2">
+                    <li>Information about our doctors and specializations</li>
+                    <li>Appointment booking guidance</li>
+                    <li>Clinic services and procedures</li>
+                    <li>General health information</li>
+                  </ul>
+                  <p class="mb-0 mt-2">How can I assist you today?</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-4 border-top">
+            <div class="input-group">
+              <input type="text" id="user-input" class="form-control form-control-lg" placeholder="Type your message here..." onkeypress="handleKeyPress(event)">
+              <button class="btn btn-primary btn-lg px-4" onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+            <div class="mt-2">
+              <small class="text-muted">Quick questions:</small>
+              <div class="d-flex flex-wrap gap-2 mt-1">
+                <button class="btn btn-outline-secondary btn-sm" onclick="quickQuestion('What services do you offer?')">Services</button>
+                <button class="btn btn-outline-secondary btn-sm" onclick="quickQuestion('How do I book an appointment?')">Book Appointment</button>
+                <button class="btn btn-outline-secondary btn-sm" onclick="quickQuestion('What are your working hours?')">Working Hours</button>
+                <button class="btn btn-outline-secondary btn-sm" onclick="quickQuestion('Do you accept insurance?')">Insurance</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+.message {
+  animation: fadeIn 0.3s ease-in;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.bot-message .avatar {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+}
+.user-message {
+  justify-content: flex-end;
+}
+.user-message .message-content {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+}
+.card {
+  border-radius: 15px;
+}
+.card-header {
+  border-radius: 15px 15px 0 0 !important;
+}
+#chat-container {
+  scroll-behavior: smooth;
+}
+.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+.btn-outline-secondary:hover {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+</style>
+
+<script>
+let chatHistory = [];
+
+function addMessage(message, isUser = false) {
+  const chatContainer = document.getElementById('chat-container');
+  const messageDiv = document.createElement('div');
+  messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'} mb-3`;
+
+  const messageContent = `
+    <div class="d-flex align-items-start ${isUser ? 'justify-content-end' : ''}">
+      ${!isUser ? `<div class="avatar bg-primary text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+        <i class="fas fa-robot"></i>
+      </div>` : ''}
+      <div class="message-content ${isUser ? 'bg-success text-white' : 'bg-white'} p-3 rounded shadow-sm" style="max-width: 70%;">
+        <p class="mb-0">${message}</p>
+      </div>
+      ${isUser ? `<div class="avatar bg-success text-white rounded-circle ms-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+        <i class="fas fa-user"></i>
+      </div>` : ''}
+    </div>
+  `;
+
+  messageDiv.innerHTML = messageContent;
+  chatContainer.appendChild(messageDiv);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+function getBotResponse(userMessage) {
+  const message = userMessage.toLowerCase();
+
+  // Clinic information responses
+  if (message.includes('hello') || message.includes('hi') || message.includes('hey')) {
+    return "Hello! Welcome to our clinic. How can I help you today?";
+  }
+
+  if (message.includes('service') || message.includes('what do you offer')) {
+    return "We offer a wide range of medical services including:<br>• General consultations<br>• Specialist appointments (Cardiology, Dermatology, Pediatrics, etc.)<br>• Diagnostic tests<br>• Preventive care<br>• Health screenings<br>• Emergency care<br><br>Would you like to know about a specific service?";
+  }
+
+  if (message.includes('book') || message.includes('appointment')) {
+    return "To book an appointment:<br>1. Browse our doctors on the homepage<br>2. Click on a doctor's profile<br>3. Click 'Book Appointment'<br>4. Fill in your preferred date and time<br>5. Submit your request<br><br>You can view your appointments in 'My Appointments' section. Would you like me to guide you through this process?";
+  }
+
+  if (message.includes('hour') || message.includes('time') || message.includes('open')) {
+    return "Our clinic hours are:<br>• Monday - Friday: 9:00 AM - 6:00 PM<br>• Saturday: 9:00 AM - 2:00 PM<br>• Sunday: Closed<br>• Emergency services: 24/7<br><br>Please note that doctor availability may vary.";
+  }
+
+  if (message.includes('insurance') || message.includes('payment')) {
+    return "We accept most major insurance plans including:<br>• Blue Cross Blue Shield<br>• Aetna<br>• Cigna<br>• United Healthcare<br>• Medicare<br><br>For uninsured patients, we offer competitive self-pay rates and payment plans. Please contact our billing department for specific coverage questions.";
+  }
+
+  if (message.includes('doctor') || message.includes('specialist')) {
+    return "We have specialists in:<br>• Cardiology<br>• Dermatology<br>• Pediatrics<br>• Orthopedics<br>• Gynecology<br>• Ophthalmology<br>• Dentistry<br><br>You can view all our doctors and their specializations on our homepage. Each doctor's profile includes their qualifications and experience.";
+  }
+
+  if (message.includes('location') || message.includes('address') || message.includes('where')) {
+    return "Our clinic is located at:<br>123 Medical Center Drive<br>Healthcare City, HC 12345<br><br>We're easily accessible by car and public transportation. Free parking is available for patients.";
+  }
+
+  if (message.includes('contact') || message.includes('phone') || message.includes('call')) {
+    return "You can reach us at:<br>• Phone: (555) 123-4567<br>• Email: info@clinic.com<br>• Emergency: (555) 911-0000<br><br>Our friendly staff is here to help with any questions!";
+  }
+
+  if (message.includes('emergency') || message.includes('urgent')) {
+    return "For medical emergencies, please call 911 immediately or go to the nearest emergency room.<br><br>For urgent but non-life-threatening issues, you can:<br>• Call our clinic at (555) 123-4567<br>• Visit our walk-in clinic during business hours<br>• Use our online booking for same-day appointments";
+  }
+
+  if (message.includes('cost') || message.includes('price') || message.includes('fee')) {
+    return "Our pricing varies depending on the service and whether you have insurance. For uninsured patients:<br>• General consultation: $150<br>• Specialist visit: $200<br>• Diagnostic tests: $50-$500<br><br>We offer payment plans and financial assistance programs. Please contact our billing office for a detailed quote.";
+  }
+
+  if (message.includes('thank') || message.includes('thanks')) {
+    return "You're welcome! I'm here to help whenever you need assistance. Is there anything else I can help you with today?";
+  }
+
+  if (message.includes('bye') || message.includes('goodbye')) {
+    return "Goodbye! Take care of your health. Feel free to come back anytime if you have more questions. Stay well!";
+  }
+
+  // Default response for unrecognized queries
+  return "I'm sorry, I didn't understand that. I can help you with information about our services, booking appointments, doctor information, clinic hours, insurance, and general health questions. Could you please rephrase your question?";
+}
+
+function sendMessage() {
+  const input = document.getElementById('user-input');
+  const message = input.value.trim();
+
+  if (message === '') return;
+
+  addMessage(message, true);
+  chatHistory.push({role: 'user', content: message});
+
+  const botResponse = getBotResponse(message);
+  setTimeout(() => {
+    addMessage(botResponse, false);
+    chatHistory.push({role: 'assistant', content: botResponse});
+  }, 500);
+
+  input.value = '';
+}
+
+function handleKeyPress(event) {
+  if (event.key === 'Enter') {
+    sendMessage();
+  }
+}
+
+function quickQuestion(question) {
+  document.getElementById('user-input').value = question;
+  sendMessage();
+}
+
+// Initialize with welcome message
+document.addEventListener('DOMContentLoaded', function() {
+  // Welcome message is already in HTML
+});
+</script>
+{% endblock %}

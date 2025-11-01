@@ -1,0 +1,5 @@
+USE clinicdb;
+select * from	users;
+INSERT INTO users (username, email, password_hash, contact, is_admin) 
+VALUES ('admin123', 'admin@example.com', 'pbkdf2:sha256:260000$TBTR0D4A0gvuaXHG$4fec38cacae6d2ceba7b49216c85af43c5670c8a0f2798b108b704c83c5c6d7a', '1234567890', 1)
+ON DUPLICATE KEY UPDATE is_admin = 1;

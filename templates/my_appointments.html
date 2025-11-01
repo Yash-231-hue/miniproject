@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-5">
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white py-4">
+          <h2 class="mb-0 fw-bold"><i class="fas fa-calendar-check me-2"></i>My Appointments</h2>
+        </div>
+        <div class="card-body p-4">
+          {% if appointments %}
+            <div class="table-responsive">
+              <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                  <tr>
+                    <th><i class="fas fa-user-md me-1"></i>Doctor</th>
+                    <th><i class="fas fa-calendar me-1"></i>Date</th>
+                    <th><i class="fas fa-clock me-1"></i>Time</th>
+                    <th><i class="fas fa-map-marker me-1"></i>Type</th>
+                    <th><i class="fas fa-info-circle me-1"></i>Status</th>
+                    <th><i class="fas fa-cogs me-1"></i>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for a in appointments %}
+                    <tr>
+                      <td>{{ a.doctor.name }}</td>
+                      <td>{{ a.date.strftime("%Y-%m-%d") }}</td>
+                      <td>{{ a.time.strftime("%H:%M") }}</td>
+                      <td>
+                        {% if a.visit_type == 'clinic' %}
+                          <span class="badge bg-primary">Clinic</span>
+                        {% else %}
+                          <span class="badge bg-info">Online</span>
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% if a.status == 'pending' %}
+                          <span class="badge bg-warning">Pending</span>
+                        {% elif a.status == 'confirmed' %}
+                          <span class="badge bg-success">Confirmed</span>
+                        {% elif a.status == 'cancelled' %}
+                          <span class="badge bg-danger">Cancelled</span>
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% if a.status == 'confirmed' %}
+                          <a href="{{ url_for('reschedule_appointment', appt_id=a.id) }}" class="btn btn-sm btn-warning me-2">
+                            <i class="fas fa-edit"></i> Reschedule
+                          </a>
+                        {% endif %}
+                        {% if a.status != 'cancelled' %}
+                          <a href="{{ url_for('cancel_appointment', appt_id=a.id) }}" class="btn btn-sm btn-danger">
+                            <i class="fas fa-times"></i> Cancel
+                          </a>
+                        {% endif %}
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <div class="text-center py-5">
+              <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+              <h4 class="text-muted">No appointments yet</h4>
+              <p class="text-muted">Book your first appointment with one of our doctors.</p>
+              <a href="{{ url_for('index') }}" class="btn btn-primary">Browse Doctors</a>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+.card {
+  border-radius: 15px;
+}
+.card-header {
+  border-radius: 15px 15px 0 0 !important;
+}
+.table th {
+  border-top: none;
+}
+</style>
+{% endblock %}

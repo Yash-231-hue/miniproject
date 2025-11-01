@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Admin - Edit User{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Edit User: {{ user.username }}</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.address.label(class="form-label") }}
+            {{ form.address(class="form-control") }}
+            {% if form.address.errors %}
+                <div class="text-danger">
+                    {% for error in form.address.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.city.label(class="form-label") }}
+            {{ form.city(class="form-control") }}
+            {% if form.city.errors %}
+                <div class="text-danger">
+                    {% for error in form.city.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.dob.label(class="form-label") }}
+            {{ form.dob(class="form-control") }}
+            {% if form.dob.errors %}
+                <div class="text-danger">
+                    {% for error in form.dob.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary">Update User</button>
+        <a href="{{ url_for('admin_users') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
