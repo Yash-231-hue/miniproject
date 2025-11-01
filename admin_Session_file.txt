@@ -1,0 +1,24 @@
+from app import app
+from models import db, User
+from werkzeug.security import generate_password_hash
+
+with app.app_context():
+    # Check if user already exists
+    existing = User.query.filter_by(username='admin123').first()
+    if not existing:
+        hashed_password = generate_password_hash('admin@123')
+        admin_user = User(
+            username='admin_username',
+            email='admin@example.com',
+            password_hash=hashed_password,
+            contact='admin_contact',
+            is_admin=True  # Key: Set to True for admin access
+        )
+        db.session.add(admin_user)
+        db.session.commit()
+        print("Admin user created successfully.")
+    else:
+        # If exists, update to admin
+        existing.is_admin = True
+        db.session.commit()
+        print("User updated to admin.")

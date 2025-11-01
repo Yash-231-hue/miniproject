@@ -1,0 +1,20 @@
+clinic_app/
+├── app.py
+├── models.py
+├── forms.py
+├── config.py
+├── templates/
+│   ├── base.html
+│   ├── index.html
+│   ├── register.html
+│   ├── login.html
+│   ├── doctor_list.html
+│   ├── admin_panel.html
+│   ├── add_doctor.html
+│   ├── doctor_profile.html
+│   ├── book_appointment.html
+│   ├── my_appointments.html
+│   └── 404.html
+├── static/
+│   └── (optional: css/js)
+└── requirements.txt
