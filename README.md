@@ -35,7 +35,7 @@ A web-based appointment booking system built with Flask, allowing patients to bo
 ## Technology Stack
 
 - **Backend**: Python Flask
-- **Database**: SQLite with SQLAlchemy ORM
+- **Database**: MYSQL (MYSQL workbench)
 - **Frontend**: HTML, CSS (Bootstrap), Jinja2 templates
 - **Authentication**: Flask-Login
 - **Forms**: Flask-WTF
@@ -149,3 +149,4 @@ clinic-appointment-system/
 ## License
 
 This project is open source and available under the MIT License.
+
